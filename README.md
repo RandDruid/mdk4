@@ -1,3 +1,10 @@
+# Changes in this fork
+
+Source code changed to compile and work under OpenWrt SDK 19.07.7. Tested on Linksys EA8500.
+
+TODO: Code cleanup, OpenWrt package.
+
+
 # MDK4
 
 MDK is a proof-of-concept tool to exploit common IEEE 802.11 protocol weaknesses.
