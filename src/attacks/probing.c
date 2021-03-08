@@ -9,6 +9,7 @@
 #include "../osdep.h"
 #include "../helpers.h"
 #include "../brute.h"
+#include "../packet.h"
 
 #define PROBING_MODE 'p'
 #define PROBING_NAME "SSID Probing and Bruteforcing"

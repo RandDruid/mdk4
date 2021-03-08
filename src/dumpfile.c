@@ -1,5 +1,6 @@
 #include <sys/time.h>
-#include <pcap.h>
+//#include <pcap.h>
+#include <pcap/pcap.h>
 
 #include "dumpfile.h"
 

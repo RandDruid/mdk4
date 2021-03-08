@@ -17,10 +17,10 @@
 #define LINKTYPE_RADIOTAP_HDR   127
 #define LINKTYPE_PPI_HDR        192
 
-#define uchar  unsigned char
-#define ushort unsigned short
-#define uint   unsigned int
-#define ulong  unsigned long
+// #define uchar  unsigned char
+// #define ushort unsigned short
+// #define uint   unsigned int
+// #define ulong  unsigned long
 
 #define SWAP32(x)       \
     x = ( ( ( x >> 24 ) & 0x000000FF ) | \
@@ -30,21 +30,21 @@
 
 struct pcap_file_header
 {
-    uint magic;
-    ushort version_major;
-    ushort version_minor;
+    unsigned int magic;
+    unsigned short version_major;
+    unsigned short version_minor;
     int thiszone;
-    uint sigfigs;
-    uint snaplen;
-    uint linktype;
+    unsigned int sigfigs;
+    unsigned int snaplen;
+    unsigned int linktype;
 };
 
 struct pcap_pkthdr
 {
     int tv_sec;
     int tv_usec;
-    uint caplen;
-    uint len;
+    unsigned int caplen;
+    unsigned int len;
 };
 
 #endif /* common.h */
