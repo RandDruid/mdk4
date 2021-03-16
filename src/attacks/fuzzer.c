@@ -147,6 +147,9 @@ struct packet fuzz_getpacket(void *options) {
   struct ether_addr dest;
   struct ieee_hdr *hdr;
 
+  static struct ether_addr client_addr;
+  static unsigned int counter = 0;
+
   if (! sniffer) {
     sniffer = malloc(sizeof(pthread_t));
     pthread_create(sniffer, NULL, (void *) fuzz_sniffer, (void *) fopt);
@@ -175,7 +178,9 @@ struct packet fuzz_getpacket(void *options) {
         source = "cts";
       break;
       case 'p':
-        pkt = create_probe(generate_mac(MAC_KIND_CLIENT), "" /* BCast Probe = Empty SSID */, 54);
+        if ((counter > 0) && (counter < fopt->speed)) { counter++; }
+        else { counter = 1; client_addr = generate_mac(MAC_KIND_CLIENT); }
+        pkt = create_probe(client_addr, "" /* BCast Probe = Empty SSID */, 54);
         source = "probe";
       break;
       default:
