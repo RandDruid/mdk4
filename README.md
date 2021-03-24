@@ -1,16 +1,28 @@
-# Changes in this fork
+## MDK4, changes in this fork
 
-Source code changed to compile and work under OpenWrt SDK 19.07.7. Tested on Linksys EA8500.
+- Source code changed to compile and work under OpenWrt SDK 19.07.7. Tested on Linksys EA8500.
+- For fuzzer with probes, create new client MAC every second (calculated from desired speed), not for every packet. This prevents overflow in monitoring 'airomon-ng'.
 
 TODO: Code cleanup, OpenWrt package.
 
+## Installation
 
-# MDK4
+```bash
+sudo apt-get install pkg-config libnl-3-dev libnl-genl-3-dev libpcap-dev 
+git clone https://github.com/RandDruid/mdk4
+cd mdk4
+make
+sudo make install
+```
+
+-----
+
+### MDK4
 
 MDK is a proof-of-concept tool to exploit common IEEE 802.11 protocol weaknesses.
 
 
-# About MDK4
+### About MDK4
 
 MDK4 is a new version of MDK3.
 
@@ -20,7 +32,7 @@ Many parts of it have been contributed by the great aircrack-ng community: Antra
 MDK4 is licenced under the GPLv2 or later.
 
 
-# Installation
+### Installation
 		apt-get install pkg-config libnl-3-dev libnl-genl-3-dev libpcap-dev 
 
 		git clone https://github.com/aircrack-ng/mdk4
@@ -30,7 +42,7 @@ MDK4 is licenced under the GPLv2 or later.
 		# Using Arch Linux (and derived) append `CC=clang` after any `make` in commands. 
 
 
-# Features
+### Features
 
 - Supports two WiFi card (one for receiving data, another for injecting data).
 - Supports block the specified ESSID/BSSID/Station MAC in command option.
@@ -39,7 +51,7 @@ MDK4 is licenced under the GPLv2 or later.
 - supports packet fuzz testing.
 
 
-# ATTACK MODE
+### ATTACK MODE
 
 		ATTACK MODE b: Beacon Flooding
 		  Sends beacon frames to show fake APs at clients.
@@ -72,7 +84,7 @@ MDK4 is licenced under the GPLv2 or later.
 		  A simple packet fuzzer with multiple packet sources
 		  and a nice set of modifiers. Be careful!
 
-# Usage
+### Usage
 
 		mdk4 <interface> <attack_mode> [attack_options]
 		mdk4 <interface in> <interface out> <attack_mode> [attack_options]
@@ -274,7 +286,4 @@ FULL OPTIONS:
 			 if speed is not specified. Speed value is in milliseconds!
 		      -p <pps>
 			 Set speed in packets per second (Default: 250)
-
-
-
 
