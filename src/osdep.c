@@ -177,7 +177,7 @@ void osdep_init_txpowers()
     }
 
     memset(&wreq, 0, sizeof(struct iwreq));
-    strncpy(wreq.ifr_name, osdep_iface_out, IFNAMSIZ);
+    strncpy(wreq.ifr_name, osdep_iface_out, IFNAMSIZ - 1);
     wreq.u.power.flags = 0;
 
     if(ioctl(osdep_sockfd_out, SIOCGIWTXPOW, &wreq) < 0) {
@@ -216,7 +216,7 @@ void osdep_init_txpowers()
 		}
 
 		memset(&wreq, 0, sizeof(struct iwreq));
-		strncpy(wreq.ifr_name, osdep_iface_in, IFNAMSIZ);
+		strncpy(wreq.ifr_name, osdep_iface_in, IFNAMSIZ - 1);
 		wreq.u.power.flags = 0;
 
 		if(ioctl(osdep_sockfd_in, SIOCGIWTXPOW, &wreq) < 0) {
@@ -263,7 +263,7 @@ void osdep_random_txpower(int min) {
     } while(available_out_txpowers[rnd] < min);
 
     memset(&wreq, 0, sizeof(struct iwreq));
-    strncpy(wreq.ifr_name, osdep_iface_out, IFNAMSIZ);
+    strncpy(wreq.ifr_name, osdep_iface_out, IFNAMSIZ - 1);
 
     ioctl(osdep_sockfd_out, SIOCGIWTXPOW, &wreq);
     wreq.u.txpower.value = available_out_txpowers[rnd];
@@ -280,7 +280,7 @@ void osdep_random_txpower(int min) {
 		} while(available_in_txpowers[rnd] < min);
 
 		memset(&wreq, 0, sizeof(struct iwreq));
-		strncpy(wreq.ifr_name, osdep_iface_in, IFNAMSIZ);
+		strncpy(wreq.ifr_name, osdep_iface_in, IFNAMSIZ - 1);
 
 		ioctl(osdep_sockfd_in, SIOCGIWTXPOW, &wreq);
 		wreq.u.txpower.value = available_in_txpowers[rnd];

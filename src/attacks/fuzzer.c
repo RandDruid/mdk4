@@ -17,6 +17,7 @@ struct fuzz_options {
   char *sources;
   char *modifiers;
   int speed;
+  struct ether_addr *client_addr_fixed;
 };
 
 //Global things, shared by packet creation and stats printing
@@ -55,7 +56,9 @@ void fuzz_longhelp()
           "         14 b/g channels. Channel will be changed every 3 seconds,\n"
           "         if speed is not specified. Speed value is in milliseconds!\n"
           "      -p <pps>\n"
-          "         Set speed in packets per second (Default: 250)\n");
+          "         Set speed in packets per second (Default: 250)\n"
+	  "      -i <client_mac>\n"
+	  " 	    Use this MAC as source for probe requests\n");
 }
 
 int like_options(char *options, char *valid) {
@@ -76,8 +79,9 @@ void *fuzz_parse(int argc, char *argv[]) {
   fopt->sources = NULL;
   fopt->modifiers = NULL;
   fopt->speed = 250;
+  fopt->client_addr_fixed = NULL;
 
-  while ((opt = getopt(argc, argv, "s:m:c:p:")) != -1) {
+  while ((opt = getopt(argc, argv, "s:m:c:p:i:")) != -1) {
     switch (opt) {
       case 'c':
         speed = 3000000;
@@ -99,6 +103,10 @@ void *fuzz_parse(int argc, char *argv[]) {
       break;
       case 'm':
         if (like_options(optarg, "nbmstcd")) fopt->modifiers = optarg;
+      break;
+      case 'i':
+	fopt->client_addr_fixed = malloc(sizeof(struct ether_addr));
+	*(fopt->client_addr_fixed) = parse_mac(optarg);
       break;
       default:
         fuzz_longhelp();
@@ -148,7 +156,7 @@ struct packet fuzz_getpacket(void *options) {
   struct ieee_hdr *hdr;
 
   static struct ether_addr client_addr;
-  static unsigned int counter = 0;
+  static int counter = 0;
 
   if (! sniffer) {
     sniffer = malloc(sizeof(pthread_t));
@@ -178,9 +186,13 @@ struct packet fuzz_getpacket(void *options) {
         source = "cts";
       break;
       case 'p':
-        if ((counter > 0) && (counter < fopt->speed)) { counter++; }
-        else { counter = 1; client_addr = generate_mac(MAC_KIND_CLIENT); }
-        pkt = create_probe(client_addr, "" /* BCast Probe = Empty SSID */, 54);
+	if (fopt->client_addr_fixed) {
+	        pkt = create_probe(*(fopt->client_addr_fixed), "" /* BCast Probe = Empty SSID */, 54);
+	} else {
+	        if ((counter > 0) && (counter < fopt->speed)) { counter++; }
+        	else { counter = 1; client_addr = generate_mac(MAC_KIND_CLIENT); }
+	        pkt = create_probe(client_addr, "" /* BCast Probe = Empty SSID */, 54);
+	}
         source = "probe";
       break;
       default:

@@ -1510,7 +1510,7 @@ static int openraw(struct priv_linux *dev, char *iface, int fd, int *arptype,
           ifr.ifr_hwaddr.sa_family != ARPHRD_IEEE80211_FULL) ||
         ( wrq.u.mode != IW_MODE_MONITOR) )
     {
-        if (set_monitor( dev, iface, fd ) && !dev->drivertype == DT_ORINOCO )
+        if (set_monitor( dev, iface, fd ) && (dev->drivertype != DT_ORINOCO) )
         {
             ifr.ifr_flags &= ~(IFF_UP | IFF_BROADCAST | IFF_RUNNING);
 
@@ -1520,7 +1520,7 @@ static int openraw(struct priv_linux *dev, char *iface, int fd, int *arptype,
                 return( 1 );
             }
 
-            if (set_monitor( dev, iface, fd ) && !dev->drivertype == DT_ORINOCO )
+            if (set_monitor( dev, iface, fd ) && (dev->drivertype != DT_ORINOCO) )
             {
                 printf("Error setting monitor mode on %s\n",iface);
                 return( 1 );
@@ -1615,7 +1615,7 @@ static int do_linux_open(struct wif *wi, char *iface)
     DIR *net_ifaces;
     struct dirent *this_iface;
     FILE *acpi;
-    char r_file[128], buf[128];
+    char r_file[290], buf[128];
     struct ifreq ifr;
     char * unused_str;
     int iface_malloced = 0;
@@ -1903,12 +1903,12 @@ static int do_linux_open(struct wif *wi, char *iface)
         //use name in buf as new iface and set original iface as main iface
         dev->main_if = (char*) malloc(strlen(iface)+1);
         memset(dev->main_if, 0, strlen(iface)+1);
-        strncpy(dev->main_if, iface, strlen(iface));
+        memcpy(dev->main_if, iface, strlen(iface));
 
         iface=(char*)malloc(strlen(buf)+1);
         iface_malloced = 1;
         memset(iface, 0, strlen(buf)+1);
-        strncpy(iface, buf, strlen(buf));
+        memcpy(iface, buf, strlen(buf));
     }
 
     /* test if rtap interface and try to find real interface */
@@ -2268,8 +2268,8 @@ int get_battery_state(void)
         DIR *batteries, *ac_adapters;
         struct dirent *this_battery, *this_adapter;
         FILE *acpi, *info;
-        char battery_state[128];
-        char battery_info[128];
+        char battery_state[285];
+        char battery_info[285];
         int rate = 1, remain = 0, current = 0;
         static int total_remain = 0, total_cap = 0;
         int batno = 0;
@@ -2307,7 +2307,6 @@ int get_battery_state(void)
         batteries = opendir("/proc/acpi/battery");
 
         if (batteries == NULL) {
-            closedir(batteries);
             return 0;
         }
 

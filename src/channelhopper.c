@@ -44,8 +44,8 @@ int lpos_out = 0;
 int chans_in [MAX_CHAN_COUNT] = {0};
 int chans_out [MAX_CHAN_COUNT] = {0};
 
-pthread_t *hopper = NULL;
-pthread_t chan_sniffer = NULL;
+pthread_t *hopper = (long unsigned int*) NULL;
+pthread_t chan_sniffer = (long unsigned int) NULL;
 int hopper_useconds = 0;
 volatile int sniff = 0;
 pthread_mutex_t chan_thread_mutex;

@@ -10,7 +10,7 @@ void create_ieee_hdr(struct packet *pkt, uint8_t type, char dsflags, uint16_t du
   struct ieee_hdr *hdr = (struct ieee_hdr *) pkt->data;
 
   //If fragment, do not increase sequence
-  if (!fragment) seqno++; seqno %= 0x1000;
+  if (!fragment) { seqno++; seqno %= 0x1000; }
 
   if (fragment > 0x0F) {
     printf("WARNING: Fragment number exceeded maximum of 15, resetting to 0.\n");
